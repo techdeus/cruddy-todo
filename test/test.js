@@ -7,7 +7,8 @@ const todos = require('../datastore/index.js');
 
 const initializeTestFiles = () => {
   counter.counterFile = path.join(__dirname, './counterTest.txt');
-  todos.dataDir = path.join(__dirname, 'testData');
+  todos.dataDir = path.join(__dirname, 'data');
+  console.log(todos.dataDir);
   todos.initialize();
 };
 

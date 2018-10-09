@@ -15,35 +15,50 @@ exports.create = (text, callback) => {
       console.log(data);
       var id = data;
       items[id] = text;
-      fs.writeFile(`./datastore/data/${id}.txt`, text, function(err) {
+      
+      // console.log('this is the path: ', exports.dataDir + '/' + id + '.txt');
+      fs.writeFile(exports.dataDir + '/' + id + '.txt', text, function(err) {
         if (err) {
           throw ('error writing file'); 
         }
-      console.log('File Saved!');
+        console.log('File Saved!');
       });
-      callback(null, { id: id, text: text });
+      callback(null, { id, text });
     }  
-  });
-  
-  
-  
+  }); 
 };
 
 exports.readAll = (callback) => {
+  // returns an array of tods to client
   var data = [];
-  _.each(items, (text, id) => {
-    data.push({ id, text });
-  });
-  callback(null, data);
+  
+  // console.log('this is the dataDir: ', exports.dataDir);
+  fs.readdir( exports.dataDir + '/', ( err, filenames ) => {
+    if ( err ) {
+      throw ('Files not read.');
+    } else {
+      // console.log('this is the filenames: ', filenames);
+      filenames.forEach(file => {
+        console.log(file);
+        data.push({id: file.split('.')[0], text: file.split('.')[0]});
+      });
+      callback(null, data);   
+    }
+  }); 
 };
 
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  fs.readFile( exports.dataDir + '/' + id + '.txt', (err, data) => {
+    if ( err ) {
+      throw ( 'File not read.');
+    } else {
+      // create a variable storing the object of file id passed
+      var todo = {id, text: data.toString()};
+      console.log('TODO: ', todo);
+      callback(null, todo);
+    }
+  });
+    
 };
 
 exports.update = (id, text, callback) => {
