@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const sprintf = require('sprintf-js').sprintf;
 
-//var counter = 0;
+var counter = 0;
 
 // Private helper functions ////////////////////////////////////////////////////
 
@@ -18,7 +18,7 @@ const zeroPaddedNumber = (num) => {
 const readCounter = (callback) => {
   fs.readFile(exports.counterFile, (err, fileData) => {
     if (err) {
-      callback(true, 0);
+      callback(null, 0);
     } else {
       callback(null, Number(fileData));
     }
@@ -41,7 +41,6 @@ const writeCounter = (count, callback) => {
 exports.getNextUniqueId = (cb) => {
   readCounter(function(err, data) {
     if ( err ) {
-      console.log('Unknown Error');
       cb(null, 0); 
     } else {
       writeCounter(data + 1, function(err, counterString) {
