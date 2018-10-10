@@ -39,20 +39,20 @@ exports.readAll = (callback) => {
     if ( err ) {
       throw ('error reading folder');
     } 
-      var data = _.map(filenames, (file) => {
+    var data = _.map(filenames, (file) => {
         
-        var id = path.basename(file, '.txt');
+      var id = path.basename(file, '.txt');
         
-        var filePath = path.join(exports.dataDir, file);
+      var filePath = path.join(exports.dataDir, file);
         
-        return readFile(filePath)
-          .then(fileData => {
-            return {
-              id: id,
-              text: fileData.toString()
-            }
-          });
-      });
+      return readFile(filePath)
+        .then(fileData => {
+          return {
+            id: id,
+            text: fileData.toString()
+          };
+        });
+    });
     Promise.all(data)
       .then(items => callback(null, items), err => callback(err));
     
